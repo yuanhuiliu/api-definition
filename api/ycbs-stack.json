@@ -1,0 +1,631 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Founder CI/CD Stack",
+    "version": "1.0",
+  },
+  "host": "stack.ycbs.test.fzyun.io",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "CI/CD升级API",
+      "description": "Cicd Controller"
+    },
+    {
+      "name": "应用商店相关 API",
+      "description": "Catalog Controller"
+    },
+    {
+      "name": "应用栈服务API",
+      "description": "Deploy Controller"
+    },
+    {
+      "name": "热配置界面",
+      "description": "Config Controller"
+    }
+  ],
+  "paths": {
+    "/v1/catalog/mr": {
+      "get": {
+        "tags": [
+          "CI/CD升级API"
+        ],
+        "summary": "通过接口提交 对应应用栈指定目标版本的MR",
+        "operationId": "pulishCatalogMrUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "stackId",
+            "in": "query",
+            "description": "stackId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "catalogVersion",
+            "in": "query",
+            "description": "catalogVersion",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ticketId",
+            "in": "query",
+            "description": "ticketId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/catalog/publish": {
+      "post": {
+        "tags": [
+          "应用商店相关 API"
+        ],
+        "summary": "推送zip到TEST环境的商店",
+        "operationId": "publishCatalogUsingPOST",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/catalog/versions": {
+      "get": {
+        "tags": [
+          "应用商店相关 API"
+        ],
+        "summary": "获取paas环境的catalog所有的版本，如果paas没指定，则获取的是test环境的",
+        "operationId": "getCatalogVersionsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "stackName",
+            "in": "query",
+            "description": "stackName",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "paas",
+            "in": "query",
+            "description": "paas",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/compose/{ticket-id}": {
+      "get": {
+        "tags": [
+          "应用栈服务API"
+        ],
+        "summary": "获取工单的DC部署配置文件",
+        "operationId": "composeUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "ticket-id",
+            "in": "path",
+            "description": "ticket-id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "paas",
+            "in": "query",
+            "description": "paas",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/config": {
+      "get": {
+        "tags": [
+          "热配置界面"
+        ],
+        "summary": "查看当前配置信息",
+        "operationId": "getConfigUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "热配置界面"
+        ],
+        "summary": "配置接口",
+        "operationId": "putConfigUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "config",
+            "description": "config",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MockConfig"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/deploys/{ticket-id}": {
+      "get": {
+        "tags": [
+          "应用栈服务API"
+        ],
+        "summary": "获取工单的部署信息",
+        "operationId": "getDeploymentDescriptorUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "ticket-id",
+            "in": "path",
+            "description": "ticket-id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "paas",
+            "in": "query",
+            "description": "paas",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/promote": {
+      "get": {
+        "tags": [
+          "CI/CD升级API"
+        ],
+        "summary": "cicd升级,如果指定了catalogVersion则推送指定catalogVersion对应的镜像版本；如果没指定，则推送当前应用栈中的镜像(只对test->stage有效)",
+        "operationId": "promoteUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "stackName",
+            "in": "query",
+            "description": "stackName",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "targetEnv",
+            "in": "query",
+            "description": "targetEnv",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          },
+          {
+            "name": "ticketId",
+            "in": "query",
+            "description": "ticketId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "catalogVersion",
+            "in": "query",
+            "description": "catalogVersion",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/stacks": {
+      "get": {
+        "tags": [
+          "应用栈服务API"
+        ],
+        "summary": "获取所有的应用栈",
+        "operationId": "stacksUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "paas",
+            "in": "query",
+            "description": "paas",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          },
+          {
+            "name": "fromPaas",
+            "in": "query",
+            "description": "fromPaas",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/stacks/{stack-name}": {
+      "get": {
+        "tags": [
+          "应用栈服务API"
+        ],
+        "summary": "获取应用栈详情",
+        "operationId": "getProductNameOfUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "stack-name",
+            "in": "path",
+            "description": "stack-name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "paas",
+            "in": "query",
+            "description": "paas",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/templates/{stack-name}": {
+      "get": {
+        "tags": [
+          "应用栈服务API"
+        ],
+        "summary": "生成应用栈配置清单模板",
+        "operationId": "generateTemplateUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "stack-name",
+            "in": "path",
+            "description": "stack-name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "paas",
+            "in": "query",
+            "description": "paas",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "TEST",
+              "STAGE",
+              "TRY",
+              "PRODUCT"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "MockConfig": {
+      "type": "object",
+      "properties": {
+        "catalogPrdUrl": {
+          "type": "string"
+        },
+        "catalogStageUrl": {
+          "type": "string"
+        },
+        "catalogTestUrl": {
+          "type": "string"
+        },
+        "catalogTryUrl": {
+          "type": "string"
+        },
+        "developPaasUrl": {
+          "type": "string"
+        },
+        "kbUrl": {
+          "type": "string"
+        },
+        "maxNumberOfTemplate": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "productPaasUrl": {
+          "type": "string"
+        },
+        "stagePaasUrl": {
+          "type": "string"
+        },
+        "testPaasUrl": {
+          "type": "string"
+        },
+        "tryPaasUrl": {
+          "type": "string"
+        }
+      },
+      "title": "MockConfig"
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Response"
+    }
+  }
+}
