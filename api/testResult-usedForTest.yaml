@@ -1,0 +1,72 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server. For this sample, you can\
+    \ use the api key `special-key` to test the authorization filters."
+  version: "1.0.0"
+  title: "Python Web"
+  contact:
+    email: "liuyuanhui@founder.com.cn"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "python-web.test.fzyun.io"
+tags:
+- name: "report"
+  description: "Upload test result"
+paths:
+  /report:
+    get:
+      tags:
+      - "report"
+      summary: "get test result"
+      operationId: "get_result"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "swagger_server.controllers.report_controller"
+    post:
+      tags:
+      - "report"
+      summary: "uploads test result"
+      operationId: "upload_result"
+      consumes:
+      - "multipart/form-data"
+      parameters:
+      - name: "buildUrl"
+        in: "query"
+        description: "Current url on Jenkins"
+        required: true
+        type: "string"
+      - name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: true
+        type: "file"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        400:
+          description: "failed operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.report_controller"
+definitions:
+  ApiResponse:
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+    example:
+      code: 0
+      message: "message"
